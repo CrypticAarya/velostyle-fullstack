@@ -227,11 +227,92 @@ This project is licensed under the MIT License.
    - Backend runs on port 5001 by default
    - Frontend runs on port 3000 by default
    - Change ports in your `.env` files if needed
+     
+## 📞 ER Diagram
+## 🧭 VELOSTYLE ER Diagram (Visual Mermaid Version)
 
-## 📞 Support
+```mermaid
+erDiagram
+    USER {
+        int user_id PK
+        string name
+        string email
+        string phone
+        string address
+        string role
+    }
 
-If you encounter any issues, please:
+    STORE {
+        int store_id PK
+        string store_name
+        string location
+        string contact
+        float rating
+    }
 
-1. Check the troubleshooting section above
-2. Search existing issues in the repository
-3. Create a new issue with detailed information about your problem
+    PRODUCT {
+        int product_id PK
+        int store_id FK
+        string name
+        string category
+        string brand
+        float price
+        int stock
+        string image_url
+    }
+
+    CART {
+        int cart_id PK
+        int user_id FK
+        float total_amount
+    }
+
+    CART_ITEM {
+        int cart_item_id PK
+        int cart_id FK
+        int product_id FK
+        int quantity
+    }
+
+    ORDER {
+        int order_id PK
+        int user_id FK
+        float total_price
+        string order_status
+        date order_date
+    }
+
+    ORDER_ITEM {
+        int order_item_id PK
+        int order_id FK
+        int product_id FK
+        int quantity
+        float price
+    }
+
+    DELIVERY {
+        int delivery_id PK
+        int order_id FK
+        string delivery_partner
+        string estimated_time
+        string status
+    }
+
+    PAYMENT {
+        int payment_id PK
+        int order_id FK
+        float amount
+        string payment_method
+        string payment_status
+    }
+
+    %% Relationships
+    USER ||--o{ ORDER : places
+    USER ||--o{ CART : owns
+    STORE ||--o{ PRODUCT : offers
+    CART ||--o{ CART_ITEM : contains
+    PRODUCT ||--o{ CART_ITEM : added_to
+    ORDER ||--o{ ORDER_ITEM : includes
+    PRODUCT ||--o{ ORDER_ITEM : listed_in
+    ORDER ||--o{ DELIVERY : tracked_by
+    ORDER ||--|| PAYMENT : has
